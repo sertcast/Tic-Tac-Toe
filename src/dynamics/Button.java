@@ -12,14 +12,15 @@ import javax.swing.JPanel;
 
 public class Button extends JPanel implements ActionListener{
 
-	private int xPos, yPos, width, height, fontSize, txtXpos, txtYpos, roundSize;
+	private int xPos, yPos, width, height, fontSize, txtXpos, txtYpos, roundSize,x,y, keep = 0;
 	private String txt;
 	private Color colour;
 	private Font font;
 	private boolean mouseIn;
 	public Button(String txt, int x, int y, int fontSize) {
 		this.colour = Color.ORANGE;
-		
+		this.x = x;
+		this.y = y;
 		this.txt = txt;
 		this.fontSize = fontSize;
 		this.font = new Font("Chalkboard", Font.PLAIN, 40);
@@ -28,30 +29,39 @@ public class Button extends JPanel implements ActionListener{
 		this.height = this.getFontMetrics(this.font).getHeight();
 		this.roundSize = this.width / 5;
 		
-		this.xPos = x - this.roundSize / 2;
-		this.yPos = y - this.height / 2 + this.getFontMetrics(this.font).getDescent();
+		this.xPos = (x - this.roundSize / 2) - (width / 2);
+		this.yPos = y - this.height / 2;
 		
-		this.txtXpos = x;
-		this.txtYpos = y + this.height / 2;
+		this.txtXpos = x - this.width / 2;
+		this.txtYpos = y + this.height /2 - this.getFontMetrics(font).getDescent();
 	}
 	public void display(Graphics g) {
 		super.paintComponent(g);
+		
 		g.setFont(this.font);
 		g.setColor(colour);
 		g.fillRoundRect(xPos, yPos, width + roundSize, height, roundSize, height);
+
 		g.setColor(Color.WHITE);
 		g.drawString(txt, txtXpos, txtYpos);
-		
+		if(this.mouseIn) {
+			g.setColor(Color.black);
+			g.drawRoundRect(xPos, yPos, width + roundSize, height, roundSize, height);		
+		}
 	}
-	
+	public void job() {
+		keep++;
+	}
 	
 	/********MOUSEMOTIONLISTENER*******/ 
 	public void mouseDragged(MouseEvent e) {}
 	public void mouseMoved(MouseEvent e) {
-		boolean isMouseXIn = e.getX() > this.xPos && e.getX() < this.xPos + this.width + this.roundSize;
-		boolean isMouseYIn = e.getY() > this.yPos && e.getX() < this.yPos + this.height;
+		boolean isMouseXIn = e.getX() > this.x  - (this.width / 2 + this.roundSize / 2)&& e.getX() < this.x + (this.width / 2 + this.roundSize / 2);
+		boolean isMouseYIn = e.getY() > this.y - this.height / 2 && e.getY() < this.y + this.height / 2;
 		if(isMouseXIn && isMouseYIn) {
-			
+			this.mouseIn = true;
+		}else {
+			this.mouseIn = false;
 		}
 	}
 	
@@ -59,7 +69,11 @@ public class Button extends JPanel implements ActionListener{
 	public void mouseClicked(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {
+		if(mouseIn) {
+			this.job();
+		}
+	}
 	public void mouseReleased(MouseEvent e) {}
 	
 	/********ACTIONLISTENER*******/
@@ -71,5 +85,8 @@ public class Button extends JPanel implements ActionListener{
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
 	
+	public int getKeep() {
+		return keep;
+	}
 
 }

@@ -15,7 +15,8 @@ import javax.swing.Timer;
 
 public class Display extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener  {
 	private Timer tm = new Timer(100, this);
-	private Button button = new Button("HelloIgy", 100,100,25);
+	private Button button = new Button("HelloIgy", 375,375 ,25);
+	private int keep = button.getKeep();
 	public Display() {
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
@@ -28,20 +29,27 @@ public class Display extends JPanel implements ActionListener, MouseListener, Mo
 		super.paintComponent(g);
 		this.setBackground(new Color(170, 203, 255));
 		button.display(g);
+		g.setColor(Color.BLACK);
+		g.drawString("" + keep, 100, 100);
 		this.tm.start();
 	}
 	public void actionPerformed(ActionEvent event) {
+		keep = button.getKeep();
 		this.repaint();
 	}
 	/********MOUSEMOTIONLISTENER*******/ 
 	public void mouseDragged(MouseEvent e) {}
-	public void mouseMoved(MouseEvent e) {}
+	public void mouseMoved(MouseEvent e) {
+		button.mouseMoved(e);
+	}
 	
 	/********MOUSELISTENER*******/
 	public void mouseClicked(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {
+		button.mousePressed(e);
+	}
 	public void mouseReleased(MouseEvent e) {}
 	
 	/********KEYLISTENER*******/
